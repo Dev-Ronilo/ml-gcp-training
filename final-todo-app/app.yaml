@@ -1,0 +1,24 @@
+steps:
+  - name: 'node:22'
+    args:
+      - ci
+    dir: final-todo-app
+    entrypoint: npm
+  - name: 'node:22'
+    env:
+      - 'NEXT_PUBLIC_APP_TITLE=${_NEXT_PUBLIC_APP_TITLE}'
+      - 'NEXT_PUBLIC_API_BASE_URL=${_NEXT_PUBLIC_API_BASE_URL}'
+    args:
+      - run
+      - create-env
+      - .env
+    dir: final-todo-app
+    entrypoint: npm
+  - name: gcr.io/cloud-builders/gcloud
+    args:
+      - app
+      - deploy
+    dir: final-todo-app
+timeout: 1600s
+options:
+  logging: CLOUD_LOGGING_ONLY
